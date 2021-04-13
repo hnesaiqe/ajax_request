@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gifs</title>
+</head>
+
+<body>
+
+    <form onsubmit="oSubmit(event)" onkeydown="oKeydown(event)">
+        <input type="text" name="search">
+        <button type="submit">rechercher</button>
+    </form>
+    <div id="container"></div>
+
+    <script>
+        function oSubmit(e) {
+            e.preventDefault();
+            fetchData(e.target.search.value);
+        }
+
+        function oKeydown(e) {
+            fetchData(e.target.value);
+        }
+
+        function fetchData(search) {
+            var key = 'JCjpTcEFC7WsuiV7pZricrMieOJO47T2';
+            var xhr = new XMLHttpRequest();
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    var response = JSON.parse(xhr.responseText);
+                    displayGiphy(response);
+                }
+            };
+            xhr.open('GET', 'https://api.giphy.com/v1/gifs/search?q=' + search + '&api_key=' + key);
+
+            xhr.send();
+        }
+
+        function displayGiphy(data) {
+            var container = document.getElementById('container');
+            container.innerHTML = '';
+
+            data.data.forEach(function (element) {
+                var img = document.createElement('img');
+                img.src = element.images.fixed_height.url;
+
+                container.appendChild(img);
+            });
+        }
+    </script>
+
+</body>
+
+</html>
