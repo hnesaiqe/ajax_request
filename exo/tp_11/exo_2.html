@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>exercise 2</title>
+</head>
+
+<body>
+    <form action="">
+        <div>
+            <input type="text" id="city" name="city" value=" ">
+            <button id="btn" type="submit" >Submit</button>
+        </div>
+        <div id="weather"></div>
+    </form>
+
+    <script>
+
+        document.getElementById('btn').addEventListener("click", submit);
+        
+        function submit(e) {
+            e.preventDefault();
+
+            var keyApi = '084fe9f41bfde9b2b66215aa4f4c84a2';
+            var xhr = new XMLHttpRequest();
+            var x = document.getElementById("city").value;
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var reponse = JSON.stringify(xhr.responseText);
+                    var reponse = JSON.parse(xhr.responseText);
+                    displayWeather(reponse);
+                    console.log(reponse);
+                   
+                };
+            };
+            xhr.open('GET', "https://api.openweathermap.org/data/2.5/weather?q=" + x + "&appid=" + keyApi + "&units=metric")
+            xhr.send();
+        };
+        
+        function displayWeather(data) {
+
+            var name = document.createElement('h1');
+            name.innerText = data.name;
+            var country = document.createElement('h3');
+            country.innerText = 'Country : ' + data.sys.country;
+
+
+            var wind = document.createElement('p');
+            wind.innerText = 'Vitesse : ' + data.wind.speed;
+            var temperature = document.createElement('p');
+            temperature.innerText = 'Temperature : ' + data.main.temp;
+
+
+            var div = document.getElementById('weather');
+            div.innerHTML = '';
+            div.appendChild(name);
+            div.appendChild(country);
+            div.appendChild(wind);
+            div.appendChild(temperature);
+        }
+     
+
+    </script>
+
+</body>
+
+</html>
